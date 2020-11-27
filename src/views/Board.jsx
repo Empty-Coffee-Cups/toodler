@@ -42,7 +42,8 @@ class Boards extends React.Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation: { state: { params } } } = this.props;
+    const { id } = params;
     const { loading, error, items } = this.state;
 
     if (loading) {
@@ -54,7 +55,8 @@ class Boards extends React.Component {
     }
 
     return (
-      <BoardsList items={items} navigation={navigation} />
+      <Text>{id}</Text>
+      // <BoardsList items={items} navigation={navigation} />
     );
   }
 }

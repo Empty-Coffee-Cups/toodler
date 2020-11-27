@@ -10,17 +10,17 @@ import AppContainer from './src/routes';
 import Boards from './src/views/Boards';
 
 function App() {
-  // return (
-  //   <SafeAreaView style={container}>
-  //     <AppContainer />
-  //   </SafeAreaView>
-  // );
-
   return (
     <SafeAreaView style={main}>
-      <Boards />
+      <AppContainer />
     </SafeAreaView>
   );
+
+  // return (
+  //   <SafeAreaView style={main}>
+  //     <Boards />
+  //   </SafeAreaView>
+  // );
 }
 
 export default App;

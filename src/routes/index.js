@@ -3,12 +3,12 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 // views
 import Boards from '../views/Boards';
-// import Board from '../views/Board';
+import Board from '../views/Board';
 
 const StackNavigator = createStackNavigator(
   {
     Boards,
-    // Board,
+    Board,
   },
   {
     defaultNavigationOptions: {

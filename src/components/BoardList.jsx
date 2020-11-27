@@ -18,14 +18,27 @@ const propTypes = {
       name: PropTypes.string,
     }),
   ),
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 const keyExtractor = ({ id }) => id.toString();
 
 class BoardList extends React.Component {
-  renderItem = ({ item: { id, name } }) => (
-    <BoardListItem id={id} name={name} />
-  );
+  renderItem = ({ item }) => {
+    const { id, name, thumbnailPhoto } = item;
+    const { navigation: { navigate } } = this.props;
+
+    return (
+      <BoardListItem
+        id={id}
+        name={name}
+        thumbnailPhoto={thumbnailPhoto}
+        onPress={() => navigate('Board', { id })}
+      />
+    );
+  };
 
   render() {
     const { items } = this.props;
