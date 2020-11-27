@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Text, Modal } from 'react-native';
-import { Container, Header, View, Button, Icon, Fab } from 'native-base';
+import { ActivityIndicator, Text, Modal, FlatList } from 'react-native';
+import { Container, Header, View, Button, Icon, Fab, List } from 'native-base';
 import PropTypes from 'prop-types';
 
 import { getAllBoards, createBoard } from '../services/boardService';
 import BoardsList from '../components/BoardList';
+import BoardListItem from '../components/BoardListItem';
 import AddBoardModal from '../components/AddBoardModal';
 
 const propTypes = {
@@ -36,6 +37,8 @@ class Boards extends React.Component {
     try {
       const boards = await getAllBoards();
 
+      console.log(boards);
+
       this.setState({
         loading: false,
         boards,
@@ -50,8 +53,23 @@ class Boards extends React.Component {
 
   async createBoard(board) {
     await createBoard(board);
-    this.fetchBoards();
+    await this.fetchBoards();
+    this.setState({ isAddBoardModalVisible: false });
   }
+
+  renderItem = ({ item }) => {
+    const { id, name, thumbnailPhoto } = item;
+    const { navigation: { navigate } } = this.props;
+
+    return (
+      <BoardListItem
+        id={id}
+        name={name}
+        thumbnailPhoto={thumbnailPhoto}
+        onPress={() => navigate('Board', { id })}
+      />
+    );
+  };
 
   render() {
     const { navigation } = this.props;
@@ -67,7 +85,13 @@ class Boards extends React.Component {
 
     return (
       <Container>
-        <BoardsList boards={boards} navigation={navigation} />
+        <List>
+          <FlatList
+            data={this.state.boards}
+            renderItem={this.renderItem}
+          />
+        </List>
+        {/* <BoardsList boards={this.state.boards} navigation={navigation} /> */}
         <AddBoardModal
           isVisible={isAddBoardModalVisible}
           closeModal={() => this.setState({ isAddBoardModalVisible: false })}

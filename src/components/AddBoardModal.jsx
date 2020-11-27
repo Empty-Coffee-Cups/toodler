@@ -29,37 +29,37 @@ const propTypes = {
 class AddBoardModal extends React.Component {
   constructor(probs) {
     super(probs);
-    this.state = {
-      loading: true,
-    };
 
     const {
       id, name, description, thumbnailPhoto,
     } = this.props;
 
-    this.board = {
-      id, name, description, thumbnailPhoto,
+    this.state = {
+      loading: true,
+      board: {
+        id, name, description, thumbnailPhoto,
+      },
     };
   }
 
   handleChange = (formName, value) => {
-    this.board = {
-      ...this.board,
-      [formName]: value,
-    };
+    const { board } = this.state;
+    this.setState({ board: { ...board, [formName]: value } });
   };
 
-  handleSubmit = (data) => {
+  handleSubmit = () => {
+    const { submitFunction } = this.props;
+    const { board } = this.state;
+
     this.setState({ loading: false });
-    console.log(this.board);
+    submitFunction(board);
   };
 
   render() {
-    const { loading } = this.state;
+    const { board } = this.state;
     const {
       isVisible,
       closeModal,
-      submitFunction,
     } = this.props;
 
     return (
@@ -78,7 +78,7 @@ class AddBoardModal extends React.Component {
                 <Input
                   autoFocus
                   required
-                  value={this.board.name}
+                  value={board.name}
                   onChangeText={(value) => this.handleChange('name', value)}
                 />
               </Item>
@@ -86,7 +86,7 @@ class AddBoardModal extends React.Component {
                 <Label>Description</Label>
                 <Input
                   placeholder="(optional)"
-                  value={this.board.description}
+                  value={board.description}
                   onChangeText={(value) => this.handleChange('description', value)}
                   multiline
                   numberOfLines={6}
@@ -96,11 +96,11 @@ class AddBoardModal extends React.Component {
                 <Label>Thumbnail Photo</Label>
                 <Input
                   placeholder="(Enter url)"
-                  value={this.board.thumbnailPhoto}
+                  value={board.thumbnailPhoto}
                   onChangeText={(value) => this.handleChange('thumbnailPhoto', value)}
                 />
               </Item>
-              <Button block onPress={(data) => this.handleSubmit(data)}>
+              <Button block onPress={() => this.handleSubmit()}>
                 <Text>Add Board</Text>
               </Button>
             </Form>
