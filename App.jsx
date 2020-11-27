@@ -1,27 +1,39 @@
-// System
-import React from 'react';
-import { SafeAreaView } from 'react-native';
-import { Container } from 'native-base';
+import React, { Component } from 'react';
+import { Root } from 'native-base';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
 
-// Stylesheet
-import { container, main } from './src/styles';
-
-// Components
 import AppContainer from './src/routes';
-import Boards from './src/views/Boards';
 
-function App() {
-  return (
-    <Container>
-      <AppContainer />
-    </Container>
-  );
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { loading: true };
+  }
 
-  // return (
-  //   <SafeAreaView style={main}>
-  //     <Boards />
-  //   </SafeAreaView>
-  // );
+  async componentDidMount() {
+    await Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+    this.setState({ loading: false });
+  }
+
+  render() {
+    const { loading } = this.state;
+
+    if (loading) {
+      return (
+        <Root>
+          <AppLoading />
+        </Root>
+      );
+    }
+
+    return (
+      <Root>
+        <AppContainer />
+      </Root>
+    );
+  }
 }
-
-export default App;

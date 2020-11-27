@@ -6,14 +6,14 @@ import React from 'react';
 import BoardListItem from './BoardListItem';
 
 const defaultProps = {
-  items: [{
+  boards: [{
     id: -1,
     name: 'unnamed',
   }],
 };
 
 const propTypes = {
-  items: PropTypes.arrayOf(
+  boards: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
       name: PropTypes.string,
@@ -42,11 +42,11 @@ class BoardList extends React.Component {
   };
 
   render() {
-    const { items } = this.props;
+    const { boards } = this.props;
     return (
       <List>
         <FlatList
-          data={items}
+          data={boards}
           renderItem={this.renderItem}
           keyExtractor={keyExtractor}
         />

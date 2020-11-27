@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ActivityIndicator, Text, Modal } from 'react-native';
 import { Container, Header, View, Button, Icon, Fab } from 'native-base';
 import PropTypes from 'prop-types';
 
 import { getAllBoards, createBoard } from '../services/boardService';
 import BoardsList from '../components/BoardList';
+import AddBoardModal from '../components/AddBoardModal';
 
 const propTypes = {
   navigation: PropTypes.shape({
@@ -22,18 +23,22 @@ class Boards extends React.Component {
     this.state = {
       loading: true,
       error: false,
-      showAddBoardModal: true,
-      items: [],
+      isAddBoardModalVisible: false,
+      boards: [],
     };
   }
 
   async componentDidMount() {
+    await this.fetchBoards();
+  }
+
+  async fetchBoards() {
     try {
-      const items = await getAllBoards();
+      const boards = await getAllBoards();
 
       this.setState({
         loading: false,
-        items,
+        boards,
       });
     } catch (e) {
       this.setState({
@@ -43,51 +48,14 @@ class Boards extends React.Component {
     }
   }
 
-  // onSubmitComment = text => {
-  //   const { selectedItemId, commentsForItem } = this.state;
-  //   const comments = commentsForItem[selectedItemId] || [];
-
-  //   const updated = {
-  //     ...commentsForItem,
-  //     [selectedItemId]: [...comments, text],
-  //   };
-
-  //   this.setState({ commentsForItem: updated });
-
-  //   try {
-  //     AsyncStorage.setItem(ASYNC_STORAGE_COMMENTS_KEY, JSON.stringify(updated));
-  //   } catch (e) {
-  //     console.log('Failed to save comment', text, 'for', selectedItemId);
-  //   }
-  // };
-
-  showAddBoardModal = (id) => {
-    this.setState({
-      showAddBoardModal: true,
-    });
-  };
-
-  hideAddBoardModal = () => {
-    this.setState({
-      showAddBoardModal: false,
-    });
-  };
-
   async createBoard(board) {
-    if (await createBoard(board).catch((e) => {
-      console.log('Got error while creating board.', e);
-    })) {
-      // Lets update our boards
-      this.fetchItems();
-      return true;
-    }
-    /* eslint-enable */
-    return false;
+    await createBoard(board);
+    this.fetchBoards();
   }
 
   render() {
     const { navigation } = this.props;
-    const { loading, error, items, showAddBoardModal } = this.state;
+    const { loading, error, boards, isAddBoardModalVisible } = this.state;
 
     if (loading) {
       return <ActivityIndicator size="large" />;
@@ -99,26 +67,14 @@ class Boards extends React.Component {
 
     return (
       <Container>
-        <BoardsList items={items} navigation={navigation} />
-        {/*
-        <Modal
-          visible={showAddBoardModal}
-          animationType="slide"
-          onRequestClose={this.hideAddBoardModal}
-        >
+        <BoardsList boards={boards} navigation={navigation} />
         <AddBoardModal
-          title="Create a new board"
-          onClose={this.closeCommentScreen}
-          onSubmitComment={this.onSubmitComment}
+          isVisible={isAddBoardModalVisible}
+          closeModal={() => this.setState({ isAddBoardModalVisible: false })}
+          submitFunction={(board) => this.createBoard(board)}
         />
-        </Modal>
-        */}
-        <Fab
-          direction="up"
-          containerStyle={{}}
-          position="bottomRight"
-        >
-          <Icon name="add" />
+        <Fab>
+          <Icon name="add" onPress={() => this.setState({ isAddBoardModalVisible: true })} />
         </Fab>
       </Container>
     );
