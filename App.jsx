@@ -1,6 +1,7 @@
 // System
 import React from 'react';
 import { SafeAreaView } from 'react-native';
+import { Container } from 'native-base';
 
 // Stylesheet
 import { container, main } from './src/styles';
@@ -11,9 +12,9 @@ import Boards from './src/views/Boards';
 
 function App() {
   return (
-    <SafeAreaView style={main}>
+    <Container>
       <AppContainer />
-    </SafeAreaView>
+    </Container>
   );
 
   // return (

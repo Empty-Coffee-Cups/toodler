@@ -1,4 +1,5 @@
 import { FlatList } from 'react-native';
+import { List, ListItem } from 'native-base';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -43,11 +44,13 @@ class BoardList extends React.Component {
   render() {
     const { items } = this.props;
     return (
-      <FlatList
-        data={items}
-        renderItem={this.renderItem}
-        keyExtractor={keyExtractor}
-      />
+      <List>
+        <FlatList
+          data={items}
+          renderItem={this.renderItem}
+          keyExtractor={keyExtractor}
+        />
+      </List>
     );
   }
 }

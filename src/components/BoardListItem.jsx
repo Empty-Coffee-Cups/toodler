@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
+import { List, ListItem, Left, Right, Icon, Body, Thumbnail } from 'native-base';
 
 import { container } from '../styles';
 
@@ -44,20 +45,22 @@ class BoardListItem extends React.Component {
     } = this.props;
 
     return (
-      <TouchableOpacity
-        style={container}
-        onPress={onPress}
-      >
-        {loading && (
-          <ActivityIndicator size="large" />
-        )}
-        <Image
-          style={StyleSheet.absoluteFill}
-          source={{ uri: thumbnailPhoto }}
-          onLoad={this.handleLoad}
-        />
-        <Text>{name}</Text>
-      </TouchableOpacity>
+      <ListItem thumbnail onPress={onPress}>
+
+        <Left>
+          {loading && (
+            <ActivityIndicator size="large" />
+          )}
+          <Thumbnail square source={{ uri: thumbnailPhoto }} onLoad={this.handleLoad} />
+        </Left>
+        <Body>
+          <Text>{name}</Text>
+        </Body>
+        <Right>
+          <Icon name="arrow-forward" />
+        </Right>
+
+      </ListItem>
     );
   }
 }
