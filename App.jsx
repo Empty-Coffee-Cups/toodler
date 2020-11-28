@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Root } from 'native-base';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import TaskListItem from './src/components/TaskListItem';
 
 import AppContainer from './src/routes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default class App extends Component {
   constructor(props) {
@@ -32,6 +34,8 @@ export default class App extends Component {
 
     return (
       <Root>
+          <SafeAreaView><TaskListItem /></SafeAreaView>
+          
         <AppContainer />
       </Root>
     );
