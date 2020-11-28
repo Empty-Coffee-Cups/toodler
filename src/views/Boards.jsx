@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { ActivityIndicator, Text, Modal, FlatList } from 'react-native';
-import { Container, Header, View, Button, Icon, Fab, List } from 'native-base';
+import React, { Component } from 'react';
+import { FlatList } from 'react-native';
+import {
+  Container, Icon, Fab, List,
+} from 'native-base';
 import PropTypes from 'prop-types';
 
-import { getAllBoards, createBoard } from '../services/boardService';
-import BoardsList from '../components/BoardList';
+import Data from '../resources/data.json';
 import BoardListItem from '../components/BoardListItem';
 import AddBoardModal from '../components/AddBoardModal';
 
@@ -14,47 +15,40 @@ const propTypes = {
   }).isRequired,
 };
 
-const defaultProps = {
-  // style: null,
-};
+const defaultProps = {};
 
-class Boards extends React.Component {
+class Boards extends Component {
   constructor() {
+    const { boards } = Data;
+
     super();
     this.state = {
-      loading: true,
-      error: false,
       isAddBoardModalVisible: false,
-      boards: [],
+      boards,
     };
   }
 
-  async componentDidMount() {
-    await this.fetchBoards();
-  }
-
-  async fetchBoards() {
-    try {
-      const boards = await getAllBoards();
-
-      console.log(boards);
-
-      this.setState({
-        loading: false,
-        boards,
-      });
-    } catch (e) {
-      this.setState({
-        loading: false,
-        error: true,
-      });
-    }
-  }
-
   async createBoard(board) {
-    await createBoard(board);
-    await this.fetchBoards();
+    const { boards } = this.state;
+
+    this.setState({
+      boards: [
+        ...boards, board,
+      ],
+    });
+
     this.setState({ isAddBoardModalVisible: false });
+  }
+
+  async deleteBoard(boardId) {
+    const { boards } = this.state;
+
+    const b = boards.filter((board) => board.id !== boardId);
+    console.log(b);
+
+    this.setState({
+      boards: b,
+    });
   }
 
   renderItem = ({ item }) => {
@@ -67,31 +61,24 @@ class Boards extends React.Component {
         name={name}
         thumbnailPhoto={thumbnailPhoto}
         onPress={() => navigate('Board', { id })}
+        onDelete={(boardId) => this.deleteBoard(boardId)}
       />
     );
   };
 
   render() {
-    const { navigation } = this.props;
-    const { loading, error, boards, isAddBoardModalVisible } = this.state;
-
-    if (loading) {
-      return <ActivityIndicator size="large" />;
-    }
-
-    if (error) {
-      return <Text>Error...</Text>;
-    }
+    const {
+      boards, isAddBoardModalVisible,
+    } = this.state;
 
     return (
       <Container>
         <List>
           <FlatList
-            data={this.state.boards}
+            data={boards}
             renderItem={this.renderItem}
           />
         </List>
-        {/* <BoardsList boards={this.state.boards} navigation={navigation} /> */}
         <AddBoardModal
           isVisible={isAddBoardModalVisible}
           closeModal={() => this.setState({ isAddBoardModalVisible: false })}

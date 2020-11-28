@@ -3,7 +3,6 @@ import { ActivityIndicator, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 import { getAllBoards } from '../services/boardService';
-import BoardsList from '../components/BoardList';
 
 const propTypes = {
   navigation: PropTypes.shape({

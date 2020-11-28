@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  TouchableOpacity,
-  Text,
-  ActivityIndicator,
-  Image,
-  StyleSheet,
+  Text, ActivityIndicator,
 } from 'react-native';
-import { List, ListItem, Left, Right, Icon, Body, Thumbnail } from 'native-base';
-
-import { container } from '../styles';
+import {
+  ListItem, Left, Right, Icon, Body, Thumbnail,
+} from 'native-base';
 
 const defaultProps = {
   name: 'unnamed',
@@ -35,10 +31,15 @@ class BoardListItem extends React.Component {
     this.setState({ loading: false });
   };
 
+  handleDelete = () => {
+    const { onDelete, id } = this.props;
+
+    onDelete(id);
+  };
+
   render() {
     const { loading } = this.state;
     const {
-      id,
       name,
       thumbnailPhoto,
       onPress,
@@ -57,7 +58,7 @@ class BoardListItem extends React.Component {
           <Text>{name}</Text>
         </Body>
         <Right>
-          <Icon name="arrow-forward" />
+          <Icon name="trash" color="#e33057" onPress={this.handleDelete}/>
         </Right>
 
       </ListItem>

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Modal } from 'react-native';
 import Modal from 'react-native-modal';
-import { Font } from 'expo';
-import { Form, Item, Label, Input, Button, Text, Content, Body, Card, CardItem } from 'native-base';
+import {
+  Form, Item, Label, Input, Button, Text, Body, Card, CardItem,
+} from 'native-base';
 
 const defaultProps = {
   id: -1,
@@ -35,7 +35,6 @@ class AddBoardModal extends React.Component {
     } = this.props;
 
     this.state = {
-      loading: true,
       board: {
         id, name, description, thumbnailPhoto,
       },
@@ -51,7 +50,6 @@ class AddBoardModal extends React.Component {
     const { submitFunction } = this.props;
     const { board } = this.state;
 
-    this.setState({ loading: false });
     submitFunction(board);
   };
 
